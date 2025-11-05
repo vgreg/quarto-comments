@@ -1,0 +1,25 @@
+project:
+  title: "Quarto Comments Demo"
+  resources:
+    - example.qmd
+  extensions:
+    - github: vgreg/quarto-comments
+
+format:
+  html:
+    theme: default
+  pdf:
+    documentclass: article
+
+comments:
+  enabled: true
+  show_author: true
+  authors:
+    vg:
+      name: "Vincent"
+      color_html: "#0072B2"
+      color_latex: "blue!20"
+    sm:
+      name: "Samuel"
+      color_html: "#D55E00"
+      color_latex: "#FF8800"
