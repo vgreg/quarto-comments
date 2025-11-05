@@ -1,0 +1,32 @@
+---
+title: "Quarto Comments Demo"
+format:
+  html: default
+  pdf: default
+comments:
+  enabled: true
+  show_author: true
+  authors:
+    vg:
+      name: "Vincent"
+      color_html: "#0072B2"
+      color_latex: "blue!20"
+    sm:
+      name: "Samuel"
+      color_html: "#D55E00"
+      color_latex: "#FF8800"
+---
+
+This short document demonstrates the **Quarto Comments** extension in both HTML and PDF outputs.
+
+{{< comment "Consider adding a motivating example in the introduction." author="vg" >}}
+
+### Model Overview
+
+We summarise the modelling approach in this section.
+
+{{< todo "Update parameter estimates once the latest run finishes." author="sm" >}}
+
+Discussion continues inline{{< question "Do we need to cite Smith (2024) here?" author="vg" inline=true >}}while keeping the flow of the paragraph.
+
+When the manuscript is ready for submission, set `comments.enabled: false` in the configuration to strip all annotations.
