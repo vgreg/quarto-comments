@@ -43,19 +43,38 @@ All aliases (`todo`, `note`, `question`) map to the same underlying logic and se
 Project-level options live under the `comments` key. They can override extension defaults:
 
 ```yaml
+---
+title: "My Document"
+validate-yaml: false  # Required for Quarto 1.8+ to accept custom comments key
+format:
+  html: default
+  pdf:
+    include-in-header:  # Required for PDF output
+      text: |
+        \usepackage{xcolor}
+        \usepackage{todonotes}
 comments:
   enabled: true      # toggle comments globally
   show_author: true  # hide author labels when false
   authors:
     vg:
       name: "Vincent Gregoire"
-      color_html: "#0072B2"
-      color_latex: "blue!20"
+      color_html: "#0072B2"        # Hex color for HTML
+      color_latex: "blue!20"       # xcolor spec for LaTeX
     sm:
       name: "Samuel"
-      color_html: "#D55E00"
-      color_latex: "#FF8800"
+      color_html: "#D55E00"        # Hex color for HTML
+      color_latex: "orange!30"     # xcolor spec for LaTeX
+---
 ```
+
+### Required Settings
+
+**YAML Validation**: Quarto 1.8+ enforces strict YAML validation. Add `validate-yaml: false` to your document frontmatter to allow the custom `comments` configuration key.
+
+**PDF/LaTeX Setup**: For PDF output, you must manually include the required LaTeX packages in your document's `include-in-header` section (shown above). Due to Quarto extension limitations, these packages cannot be injected automatically by the extension.
+
+### Optional Settings
 
 - When `enabled: false`, all comment shortcodes are stripped from the output.
 - Authors without defined colours fall back to sensible defaults per comment type.
@@ -72,7 +91,7 @@ comments:
 ### PDF / LaTeX
 
 - Comments render via the `todonotes` package; inline comments use `\todo[inline]{...}`.
-- The filter injects `\usepackage{xcolor}` and `\usepackage{todonotes}` only when comments are present.
+- Requires manual setup of `\usepackage{xcolor}` and `\usepackage{todonotes}` in your document's `include-in-header` section (see Configuration above).
 - Author-specific colours are defined dynamically. Hex colours are converted to `\definecolor`.
 - Base layout hints (margin width, default todo styling) live in `_extensions/comments/assets/comments.sty`.
 

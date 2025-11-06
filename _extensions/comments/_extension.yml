@@ -1,19 +1,22 @@
 title: Quarto Comments
-author: "Quarto Comments Team"
-version: 0.1.0
+author: "Vincent Grégoire"
+version: 0.1.1
 quarto-required: ">=1.5.0"
+metadata-keys:
+  - comments
 contributes:
   shortcodes:
     - comment
     - todo
     - note
     - question
-  filters:
-    - comments
   formats:
     html:
       css:
         - assets/comments.css
+    pdf:
+      include-in-header:
+        - latex-header.tex
   project:
     resources:
       - assets/comments.sty

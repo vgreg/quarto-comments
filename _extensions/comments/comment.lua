@@ -10,6 +10,8 @@ end
 
 local render = core()
 
-return function(args, kwargs, meta)
-  return render(args, kwargs, meta, nil)
-end
+return {
+  ['comment'] = function(args, kwargs, meta)
+    return render(args, kwargs, meta, nil)
+  end
+}

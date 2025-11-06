@@ -41,3 +41,11 @@ luac.out
 
 # macOS metadata
 .DS_Store
+
+
+_extensions/vgreg/
+/.quarto/
+**/*.quarto_ipynb
+example.html
+example.pdf
+example_files/

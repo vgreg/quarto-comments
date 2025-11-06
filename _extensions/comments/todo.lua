@@ -10,7 +10,9 @@ end
 
 local render = core()
 
-return function(args, kwargs, meta)
-  kwargs = kwargs or {}
-  return render(args, kwargs, meta, "note")
-end
+return {
+  ['todo'] = function(args, kwargs, meta)
+    kwargs = kwargs or {}
+    return render(args, kwargs, meta, "todo")
+  end
+}

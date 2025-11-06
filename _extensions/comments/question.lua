@@ -10,7 +10,9 @@ end
 
 local render = core()
 
-return function(args, kwargs, meta)
-  kwargs = kwargs or {}
-  return render(args, kwargs, meta, "todo")
-end
+return {
+  ['question'] = function(args, kwargs, meta)
+    kwargs = kwargs or {}
+    return render(args, kwargs, meta, "question")
+  end
+}
