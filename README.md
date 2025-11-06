@@ -53,16 +53,17 @@ format:
       text: |
         \usepackage{xcolor}
         \usepackage{todonotes}
+        \usepackage{emoji}
 comments:
   enabled: true      # toggle comments globally
   show_author: true  # hide author labels when false
   authors:
     vg:
-      name: "Vincent Gregoire"
+      name: "Vincent"
       color_html: "#0072B2"        # Hex color for HTML
       color_latex: "blue!20"       # xcolor spec for LaTeX
-    sm:
-      name: "Samuel"
+    cg:
+      name: "Clara"
       color_html: "#D55E00"        # Hex color for HTML
       color_latex: "orange!30"     # xcolor spec for LaTeX
 ---
@@ -91,9 +92,20 @@ comments:
 ### PDF / LaTeX
 
 - Comments render via the `todonotes` package; inline comments use `\todo[inline]{...}`.
-- Requires manual setup of `\usepackage{xcolor}` and `\usepackage{todonotes}` in your document's `include-in-header` section (see Configuration above).
+- Requires manual setup of `\usepackage{xcolor}`, `\usepackage{todonotes}`, and `\usepackage{emoji}` in your document's `include-in-header` section (see Configuration above).
 - Author-specific colours are defined dynamically. Hex colours are converted to `\definecolor`.
 - Base layout hints (margin width, default todo styling) live in `_extensions/comments/assets/comments.sty`.
+- **List of Comments**: To generate a table of contents-style list of all comments at the beginning of your PDF document, add `\listoftodos` to your `include-before-body` section:
+
+  ```yaml
+  format:
+    pdf:
+      include-before-body:
+        text: |
+          \listoftodos
+  ```
+
+  This will create a clickable list of all margin comments with their page numbers (inline comments are excluded from the list).
 
 ### Other Formats
 

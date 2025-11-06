@@ -37,6 +37,13 @@ local COMMENT_ICONS = {
   question = "❓", -- question mark
 }
 
+local LATEX_EMOJI_COMMANDS = {
+  comment = "\\emoji{speech-balloon}",
+  todo = "\\emoji{memo}",
+  note = "\\emoji{pushpin}",
+  question = "\\emoji{red-question-mark}",
+}
+
 local function sanitize_class(value)
   local cleaned = tostring(value or "")
   cleaned = cleaned:gsub("%s+", "-")
@@ -96,14 +103,16 @@ local function meta_to_string(value)
 end
 
 local function meta_to_bool(value)
-  if not value then
+  if value == nil then
     return nil
   end
   if type(value) == "boolean" then
     return value
   end
-  if value.t == "MetaBool" then
-    return value
+  if type(value) == "table" and value.t == "MetaBool" then
+    -- MetaBool objects are truthy tables, need to check stringified value
+    local text = pandoc.utils.stringify(value):lower()
+    return text == "true"
   end
   local text = meta_to_string(value):lower()
   if text == "true" or text == "1" or text == "yes" then
@@ -128,14 +137,14 @@ local function get_config(meta)
   end
 
   -- Access MetaMap fields directly, not via pairs()
-  if config_meta.enabled then
+  if config_meta.enabled ~= nil then
     local enabled = meta_to_bool(config_meta.enabled)
     if enabled ~= nil then
       config.enabled = enabled
     end
   end
 
-  if config_meta.show_author then
+  if config_meta.show_author ~= nil then
     local show_author = meta_to_bool(config_meta.show_author)
     if show_author ~= nil then
       config.show_author = show_author
@@ -318,9 +327,6 @@ local function build_html_block(comment_type, comment_text, author, html_color, 
   else
     title_text = title_text .. type_label(comment_type)
   end
-  if show_author and comment_type ~= "comment" then
-    title_text = title_text .. " — " .. type_label(comment_type)
-  end
 
   local title_style = ""
   if html_color then
@@ -366,11 +372,17 @@ local function build_latex(comment_type, comment_text, author, inline, config)
     table.insert(options, "color=" .. latex_color)
   end
   local option_string = ""
+  table.insert(options, "size=\\footnotesize")
   if #options > 0 then
     option_string = "[" .. table.concat(options, ",") .. "]"
   end
 
   local pieces = {}
+
+  -- Add emoji icon
+  local emoji_cmd = LATEX_EMOJI_COMMANDS[comment_type] or LATEX_EMOJI_COMMANDS.comment
+  table.insert(pieces, emoji_cmd .. " ")
+
   local show_author = config.show_author and author and author.name and author.name ~= ""
   if show_author then
     table.insert(pieces, "\\textbf{" .. escape_latex(author.name) .. ":} ")
