@@ -48,4 +48,5 @@ _extensions/vgreg/
 **/*.quarto_ipynb
 example.html
 example.pdf
+example.tdo
 example_files/

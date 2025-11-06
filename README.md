@@ -1,6 +1,6 @@
 # Quarto Comments Extension
 
-The **Quarto Comments** extension adds collaboration-friendly annotations to Quarto documents. Authors can insert inline notes, to-dos, and discussion points that render as margin callouts in HTML outputs and as `todonotes` in PDF/LaTeX builds. Comments can be toggled globally and customised per author or reviewer.
+The **Quarto Comments** extension adds collaboration-friendly annotations to Quarto documents. Authors can insert inline notes, to-dos, and discussion points that render as margin callouts in HTML outputs and as [`todonotes`](https://ctan.org/pkg/todonotes) in PDF/LaTeX builds. Comments can be toggled globally and customised per author or reviewer.
 
 ## Installation
 
@@ -15,6 +15,16 @@ project:
   extensions:
     - comments
 ```
+
+IMPORTANT: You are not done yet! See the **Configuration** section below for additional setup steps required for PDF output.
+
+## Screenshot
+
+Here are sample renderings of the same document with comments in both HTML and PDF formats:
+
+![HTML rendering with margin callouts and inline comments](sample-html.webp)
+
+![PDF rendering with todo list and margin notes](sample-pdf.webp)
 
 ## Shortcodes
 
@@ -54,6 +64,9 @@ format:
         \usepackage{xcolor}
         \usepackage{todonotes}
         \usepackage{emoji}
+    include-before-body:  # Optional: add list of comments at document start
+      text: |
+        \listoftodos
 comments:
   enabled: true      # toggle comments globally
   show_author: true  # hide author labels when false
@@ -91,21 +104,11 @@ comments:
 
 ### PDF / LaTeX
 
-- Comments render via the `todonotes` package; inline comments use `\todo[inline]{...}`.
+- Comments render via the [`todonotes`](https://ctan.org/pkg/todonotes) package; inline comments use `\todo[inline]{...}`.
 - Requires manual setup of `\usepackage{xcolor}`, `\usepackage{todonotes}`, and `\usepackage{emoji}` in your document's `include-in-header` section (see Configuration above).
 - Author-specific colours are defined dynamically. Hex colours are converted to `\definecolor`.
 - Base layout hints (margin width, default todo styling) live in `_extensions/comments/assets/comments.sty`.
-- **List of Comments**: To generate a table of contents-style list of all comments at the beginning of your PDF document, add `\listoftodos` to your `include-before-body` section:
-
-  ```yaml
-  format:
-    pdf:
-      include-before-body:
-        text: |
-          \listoftodos
-  ```
-
-  This will create a clickable list of all margin comments with their page numbers (inline comments are excluded from the list).
+- **List of Comments**: To generate a clickable table of contents-style list of all margin comments at the beginning of your PDF document, add `\listoftodos` to your `include-before-body` section (see example in Configuration above). Inline comments are excluded from the list.
 
 ### Other Formats
 
