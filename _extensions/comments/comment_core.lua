@@ -226,6 +226,31 @@ local function escape_latex(text)
   return escaped
 end
 
+local function escape_latex_with_math(text)
+  -- Préserve les régions $...$ et les échappe pas
+  local result = {}
+  local i = 1
+  while i <= #text do
+    local j = text:find("%$", i)
+    if not j then
+      table.insert(result, escape_latex(text:sub(i)))
+      break
+    end
+    if j > i then
+      table.insert(result, escape_latex(text:sub(i, j - 1)))
+    end
+    local k = text:find("%$", j + 1)
+    if k then
+      table.insert(result, text:sub(j, k))   -- region math verbatim
+      i = k + 1
+    else
+      table.insert(result, "\\$")             -- $ orphelin
+      i = j + 1
+    end
+  end
+  return table.concat(result)
+end
+
 local function type_label(comment_type)
   if comment_type == "todo" then
     return "To-do"
@@ -387,7 +412,7 @@ local function build_latex(comment_type, comment_text, author, inline, config)
   if show_author then
     table.insert(pieces, "\\textbf{" .. escape_latex(author.name) .. ":} ")
   end
-  table.insert(pieces, escape_latex(comment_text))
+  table.insert(pieces, escape_latex_with_math(comment_text))
   local content = table.concat(pieces)
 
   local todo = string.format("\\todo%s{%s}", option_string, content)
