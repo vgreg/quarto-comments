@@ -227,7 +227,7 @@ local function escape_latex(text)
 end
 
 local function escape_latex_with_math(text)
-  -- Préserve les régions $...$ et les échappe pas
+  -- Preserves the $...$ math regions and does not escape them
   local result = {}
   local i = 1
   while i <= #text do
