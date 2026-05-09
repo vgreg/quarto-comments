@@ -226,6 +226,31 @@ local function escape_latex(text)
   return escaped
 end
 
+local function escape_latex_with_math(text)
+  -- Preserves the $...$ math regions and does not escape them
+  local result = {}
+  local i = 1
+  while i <= #text do
+    local j = text:find("%$", i)
+    if not j then
+      table.insert(result, escape_latex(text:sub(i)))
+      break
+    end
+    if j > i then
+      table.insert(result, escape_latex(text:sub(i, j - 1)))
+    end
+    local k = text:find("%$", j + 1)
+    if k then
+      table.insert(result, text:sub(j, k))   -- region math verbatim
+      i = k + 1
+    else
+      table.insert(result, "\\$")             -- $ orphelin
+      i = j + 1
+    end
+  end
+  return table.concat(result)
+end
+
 local function type_label(comment_type)
   if comment_type == "todo" then
     return "To-do"
@@ -235,6 +260,19 @@ local function type_label(comment_type)
     return "Question"
   end
   return "Comment"
+end
+
+-- Parse a text string as Markdown and return its inlines, so that
+-- $...$ math regions become proper pandoc.Math nodes rendered by MathJax/KaTeX.
+local function parse_inlines(text)
+  local doc = pandoc.read(text, "markdown")
+  if doc.blocks and #doc.blocks > 0 then
+    local first = doc.blocks[1]
+    if first.t == "Para" or first.t == "Plain" then
+      return first.content
+    end
+  end
+  return pandoc.List({ pandoc.Str(text) })
 end
 
 local function build_html_inline(comment_type, comment_text, author, html_color, config)
@@ -253,9 +291,8 @@ local function build_html_inline(comment_type, comment_text, author, html_color,
       "padding: 0.1rem 0.45rem",
       "border-radius: 0.4rem",
       "font-size: 0.9em",
-      "display: inline-flex",
-      "align-items: baseline",
-      "gap: 0.25rem"
+      "display: inline-block",
+      "vertical-align: baseline",
     }
     attributes.style = table.concat(style_parts, "; ") .. ";"
   end
@@ -279,7 +316,7 @@ local function build_html_inline(comment_type, comment_text, author, html_color,
   if show_author then
     content:insert(pandoc.Strong { pandoc.Str(author.name .. ": ") })
   end
-  content:insert(pandoc.Str(comment_text))
+  content:extend(parse_inlines(comment_text))
 
   return pandoc.Span(content, pandoc.Attr("", classes, attributes))
 end
@@ -344,7 +381,7 @@ local function build_html_block(comment_type, comment_text, author, html_color, 
   )
 
   local body = pandoc.Div(
-    { pandoc.Para({ pandoc.Str(comment_text) }) },
+    { pandoc.Para(parse_inlines(comment_text)) },
     pandoc.Attr("", { "callout-body-container", "callout-body" })
   )
 
@@ -387,7 +424,7 @@ local function build_latex(comment_type, comment_text, author, inline, config)
   if show_author then
     table.insert(pieces, "\\textbf{" .. escape_latex(author.name) .. ":} ")
   end
-  table.insert(pieces, escape_latex(comment_text))
+  table.insert(pieces, escape_latex_with_math(comment_text))
   local content = table.concat(pieces)
 
   local todo = string.format("\\todo%s{%s}", option_string, content)
