@@ -1,6 +1,5 @@
 ---
 title: "Quarto Comments Demo"
-validate-yaml: false
 format:
   html: default
   pdf:
@@ -12,18 +11,19 @@ format:
     include-before-body:
       text: |
         \listoftodos
-comments:
-  enabled: true
-  show_author: true
-  authors:
-    vg:
-      name: "Vincent"
-      color_html: "#0072B2"
-      color_latex: "blue!20"
-    cg:
-      name: "Clara"
-      color_html: "#D55E00"
-      color_latex: "orange!30"
+extensions:
+  quarto-comments:
+    enabled: true
+    show_author: true
+    authors:
+      vg:
+        name: "Vincent"
+        color_html: "#0072B2"
+        color_latex: "blue!20"
+      cg:
+        name: "Clara"
+        color_html: "#D55E00"
+        color_latex: "orange!30"
 ---
 
 This short document demonstrates the **Quarto Comments** extension in both HTML and PDF outputs.

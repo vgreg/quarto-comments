@@ -131,7 +131,7 @@ local function get_config(meta)
     authors = {},
   }
 
-  local config_meta = meta and meta.comments
+  local config_meta = meta and meta.extensions and meta.extensions["quarto-comments"]
   if not config_meta then
     return config
   end

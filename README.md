@@ -55,7 +55,6 @@ Project-level options live under the `comments` key. They can override extension
 ```yaml
 ---
 title: "My Document"
-validate-yaml: false  # Required for Quarto 1.8+ to accept custom comments key
 format:
   html: default
   pdf:
@@ -67,24 +66,21 @@ format:
     include-before-body:  # Optional: add list of comments at document start
       text: |
         \listoftodos
-comments:
-  enabled: true      # toggle comments globally
-  show_author: true  # hide author labels when false
-  authors:
-    vg:
-      name: "Vincent"
-      color_html: "#0072B2"        # Hex color for HTML
-      color_latex: "blue!20"       # xcolor spec for LaTeX
-    cg:
-      name: "Clara"
-      color_html: "#D55E00"        # Hex color for HTML
-      color_latex: "orange!30"     # xcolor spec for LaTeX
+extensions:
+  quarto-comments:
+    enabled: true      # toggle comments globally
+    show_author: true  # hide author labels when false
+    authors:
+      vg:
+        name: "Vincent"
+        color_html: "#0072B2"        # Hex color for HTML
+        color_latex: "blue!20"       # xcolor spec for LaTeX
+      cg:
+        name: "Clara"
+        color_html: "#D55E00"        # Hex color for HTML
+        color_latex: "orange!30"     # xcolor spec for LaTeX
 ---
 ```
-
-### Required Settings
-
-**YAML Validation**: Quarto 1.8+ enforces strict YAML validation. Add `validate-yaml: false` to your document frontmatter to allow the custom `comments` configuration key.
 
 **PDF/LaTeX Setup**: For PDF output, you must manually include the required LaTeX packages in your document's `include-in-header` section (shown above). Due to Quarto extension limitations, these packages cannot be injected automatically by the extension.
 
