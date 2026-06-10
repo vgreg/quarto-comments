@@ -2,6 +2,10 @@
 
 The **Quarto Comments** extension adds collaboration-friendly annotations to Quarto documents. Authors can insert inline notes, to-dos, and discussion points that render as margin callouts in HTML outputs and as [`todonotes`](https://ctan.org/pkg/todonotes) in PDF/LaTeX builds. Comments can be toggled globally and customised per author or reviewer.
 
+## ARCHIVED
+
+The repo is now archived, as I won't be making any updates. If you are using `quarto-comments`, it should keep on working for now, but you should consider migrating to [quarto-proofread-comments](https://github.com/zinc75/quarto-proofread-comments), which is actively maintained by Éric Bavu and already has many useful extra features.
+
 ## Installation
 
 ```bash
